@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/img">
+        <file>icon.ico</file>
+        <file>byte.png</file>
+        <file>files.png</file>
+        <file>start.png</file>
+        <file>last.png</file>
+        <file>first.png</file>
+        <file>previous.png</file>
+        <file>next.png</file>
+    </qresource>
+</RCC>
