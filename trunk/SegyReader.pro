@@ -17,18 +17,21 @@ SOURCES += main.cpp\
     segy.cpp \
     segyanalyzer.cpp \
     setbyte.cpp \
-    printview.cpp
+    printview.cpp \
+    ilxlrange.cpp
 
 HEADERS  += mainwindow.h \
     util.h \
     segy.h \
     segyanalyzer.h \
     setbyte.h \
-    printview.h
+    printview.h \
+    ilxlrange.h
 
 FORMS    += mainwindow.ui \
     segyanalyzer.ui \
-    setbyte.ui
+    setbyte.ui \
+    ilxlrange.ui
 
 RESOURCES += \
     resources.qrc

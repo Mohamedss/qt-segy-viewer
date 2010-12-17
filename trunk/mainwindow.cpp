@@ -2,6 +2,7 @@
 #include <mainwindow.h>
 #include <ui_mainwindow.h>
 #include <segyanalyzer.h>
+#include <ilxlrange.h>
 
 FILE* _F = NULL;
 char  _EbcdicHeader [3200];
@@ -39,6 +40,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->btnNextTrace, SIGNAL(clicked()), this, SLOT(goNextTrace()));
     connect(ui->btnPrevTrace, SIGNAL(clicked()), this, SLOT(goPrevTrace()));
     connect(ui->spinboxTrace, SIGNAL(valueChanged(int)), this, SLOT(goToTrace(int)));
+    connect(ui->actionFind_Min_Max_Inline_Xline, SIGNAL(triggered()), this, SLOT(runIlXlRange()));
 }
 
 MainWindow::~MainWindow()
@@ -82,12 +84,12 @@ void MainWindow::goLastTrace()
 
 void MainWindow::goPrevTrace()
 {
-    ui->spinboxTrace->setValue(ui->spinboxTrace->value() - 1);
+    ui->spinboxTrace->setValue(ui->spinboxTrace->value() - ui->spinBox->value());
 }
 
 void MainWindow::goNextTrace()
 {
-    ui->spinboxTrace->setValue(ui->spinboxTrace->value() + 1);
+    ui->spinboxTrace->setValue(ui->spinboxTrace->value() + ui->spinBox->value());
 }
 
 void MainWindow::runSEGYAnalyzer()
@@ -139,5 +141,52 @@ void MainWindow::openSEGY(QString filename)
                 "Sample Interval :...." + QString::number(segy->_SampleInterval) + " ms\n"
                 "Total Samples :......" + QString::number(segy->_TotalSamples)
         );
+    }
+}
+
+void MainWindow::runIlXlRange()
+{
+    if(segy->FileIsOpen())
+    {
+        ilxlrange *ilxl = new ilxlrange();
+        ilxl->exec();
+        if(ilxl->result() == 1)
+        {
+            int il,xl;
+            il = ilxl->byteInline;
+            xl = ilxl->byteXline;
+
+            //Read at _ByteInline and from 1 to _TotalTraces
+            int minInline, maxInline, minXline, maxXline, tmp;
+            minInline = maxInline = minXline = maxXline = tmp = 0;
+
+            QElapsedTimer timer;
+            timer.start();
+            for(int trace=1; trace<=segy->_TotalTraces; trace++)
+            {
+                tmp = segy->Read4Byte(trace, il);
+                if(minInline == 0 && maxInline == 0) { minInline = tmp; maxInline = tmp; }
+                minInline = (tmp < minInline)?  tmp:minInline;
+                maxInline = (tmp > maxInline)?  tmp:maxInline;
+                tmp = segy->Read4Byte(trace, xl);
+                if(minXline == 0 && maxXline == 0) { minXline = tmp; maxXline = tmp; }
+                minXline = (tmp < minXline)?  tmp:minXline;
+                maxXline = (tmp > maxXline)?  tmp:maxXline;
+            }
+            long ms = timer.elapsed();
+            QTime time(0,0,0,ms);
+            QMessageBox::information(this,
+                 "Result",
+                 "Min Inline = " + QString::number(minInline) + "\n" +
+                 "Max Inline = " + QString::number(maxInline) + "\n" +
+                 "Min Xline = " + QString::number(minXline) + "\n" +
+                 "Max Xline = " + QString::number(maxXline) + "\n\n" +
+                 "Time used = " + time.toString("hh mm ss")
+            );
+        }
+    }
+    else
+    {
+        QMessageBox::critical(this,"Error","SEGY file is not opened.");
     }
 }

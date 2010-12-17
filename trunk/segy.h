@@ -39,10 +39,12 @@ public:
     bool  OpenFile(char*);    
     bool  FileIsOpen();
     void  ReadFirstAndLast();
-    void  ShowTraceHeader(int, QPlainTextEdit*);
+    void  ShowTraceHeader(long long, QPlainTextEdit*);
     void  ShowBinaryHeader(QPlainTextEdit*);
     void  ShowEbcdicHeader(QPlainTextEdit*);
     void  SetByte(int,int,int,int,int,int,int,int);
+    int   Read2Byte(long long,int);
+    int   Read4Byte(long long,int);
 
 private: 
     FILE* _F;
@@ -52,7 +54,7 @@ private:
     char  _INPTRC       [10000];
     float _Data         [10000];
     float GetSample(int);
-    bool  ReadTrace(int);
+    bool  ReadTrace(long long);
 };
 
 #endif // SEGY_H
