@@ -18,17 +18,18 @@ SEGY::SEGY()
 
 bool SEGY::OpenFile(char* _Filename)
 {
-    int l;
+    long long l;
 
     if(_F)
         fclose(_F);
 
-    _F = fopen(_Filename, "rb");
+    _F = fopen64(_Filename, "rb");
 
     if(_F)
     {
-        fseek(_F,0,SEEK_END);
+        fseeko64(_F,0,SEEK_END);
         l = ftell(_F);
+        l = ftello64(_F);
 
         fseek(_F,0,SEEK_SET);
 
@@ -49,7 +50,7 @@ bool SEGY::OpenFile(char* _Filename)
         else
             _SampleRate = 4;
 
-        _TRL = 240+_TotalSamples*_SampleRate;
+        _TRL = 240 + _TotalSamples * _SampleRate;
 
         if(_TRL <= 240)
             goto ERR;
@@ -187,9 +188,9 @@ float SEGY::GetSample(int idx)
     return smp;
 }
 
-bool SEGY::ReadTrace(int n)
+bool SEGY::ReadTrace(long long n)
 {
-    int l;
+    long long l;
 
     if(_F == NULL) return false;
 
@@ -201,7 +202,7 @@ bool SEGY::ReadTrace(int n)
         return false;
     }
 
-    fseek(_F, 3600+(n-1)*_TRL, SEEK_SET);
+    fseeko64(_F, 3600+(n-1)*_TRL, SEEK_SET);
     l = fread(_INPTRC, 1, _TRL, _F );
 
     _CurrentTrace = n;
@@ -212,7 +213,7 @@ bool SEGY::ReadTrace(int n)
     return true;
 }
 
-void SEGY::ShowTraceHeader(int _TraceNo, QPlainTextEdit *ptxtTrace)
+void SEGY::ShowTraceHeader(long long _TraceNo, QPlainTextEdit *ptxtTrace)
 {
     ptxtTrace->clear();
 
@@ -260,7 +261,7 @@ void SEGY::ShowTraceHeader(int _TraceNo, QPlainTextEdit *ptxtTrace)
 
 bool SEGY::FileIsOpen()
 {
-    if(!_F) return true;
+    if(_F != NULL) return true;
     else return false;
 }
 
@@ -314,4 +315,16 @@ void SEGY::SetByte(int cdp, int sp, int x, int y, int il, int xl, int name, int 
     _ByteXline  = xl;
     _ByteLineName = name;
     _LineNameLength = length;
+}
+
+int SEGY::Read2Byte(long long trace, int byte)
+{
+    if(!ReadTrace(trace)) return 0;
+    return i2(_INPTRC, byte);
+}
+
+int SEGY::Read4Byte(long long trace, int byte)
+{
+    if(!ReadTrace(trace)) return 0;
+    return i4(_INPTRC, byte);
 }
