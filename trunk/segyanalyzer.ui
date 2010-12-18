@@ -14,7 +14,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>SEGY Analyzer</string>
+   <string>2D SEGY Analyzer</string>
   </property>
   <property name="windowIcon">
    <iconset resource="resources.qrc">

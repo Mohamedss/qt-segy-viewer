@@ -429,7 +429,7 @@
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionSEGY_Analyzer">
    <property name="text">
-    <string>SEGY Analyzer</string>
+    <string>2D SEGY Analyzer</string>
    </property>
   </action>
   <action name="actionOpen">
@@ -444,7 +444,7 @@
   </action>
   <action name="actionFind_Min_Max_Inline_Xline">
    <property name="text">
-    <string>Min-Max Inline Xline</string>
+    <string>3D IL-XL Range + Corner Points</string>
    </property>
   </action>
  </widget>

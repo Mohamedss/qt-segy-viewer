@@ -6,17 +6,11 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>181</width>
-    <height>100</height>
+    <width>222</width>
+    <height>180</height>
    </rect>
   </property>
   <property name="minimumSize">
-   <size>
-    <width>181</width>
-    <height>100</height>
-   </size>
-  </property>
-  <property name="maximumSize">
    <size>
     <width>181</width>
     <height>100</height>
@@ -41,7 +35,7 @@
   <widget class="QSpinBox" name="spinboxInlineByte">
    <property name="geometry">
     <rect>
-     <x>80</x>
+     <x>120</x>
      <y>10</y>
      <width>91</width>
      <height>22</height>
@@ -82,7 +76,7 @@
   <widget class="QSpinBox" name="spinboxXlineByte">
    <property name="geometry">
     <rect>
-     <x>80</x>
+     <x>120</x>
      <y>40</y>
      <width>91</width>
      <height>22</height>
@@ -110,8 +104,8 @@
   <widget class="QPushButton" name="btnClose">
    <property name="geometry">
     <rect>
-     <x>100</x>
-     <y>70</y>
+     <x>120</x>
+     <y>140</y>
      <width>71</width>
      <height>23</height>
     </rect>
@@ -123,14 +117,96 @@
   <widget class="QPushButton" name="btnStart">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>70</y>
+     <x>30</x>
+     <y>140</y>
      <width>75</width>
      <height>23</height>
     </rect>
    </property>
    <property name="text">
     <string>Start</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_4">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>70</y>
+     <width>101</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>X coordinate byte #</string>
+   </property>
+  </widget>
+  <widget class="QSpinBox" name="spinboxYByte">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>100</y>
+     <width>91</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="locale">
+    <locale language="English" country="UnitedStates"/>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+   <property name="buttonSymbols">
+    <enum>QAbstractSpinBox::NoButtons</enum>
+   </property>
+   <property name="minimum">
+    <number>1</number>
+   </property>
+   <property name="maximum">
+    <number>300</number>
+   </property>
+   <property name="value">
+    <number>85</number>
+   </property>
+  </widget>
+  <widget class="QSpinBox" name="spinboxXByte">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>70</y>
+     <width>91</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="locale">
+    <locale language="English" country="UnitedStates"/>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+   <property name="buttonSymbols">
+    <enum>QAbstractSpinBox::NoButtons</enum>
+   </property>
+   <property name="minimum">
+    <number>1</number>
+   </property>
+   <property name="maximum">
+    <number>300</number>
+   </property>
+   <property name="value">
+    <number>81</number>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_5">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>100</y>
+     <width>101</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Y coordinate byte #</string>
    </property>
   </widget>
  </widget>

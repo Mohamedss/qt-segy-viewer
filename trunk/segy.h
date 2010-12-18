@@ -33,6 +33,16 @@ public:
     int    _ByteXline;
     int    _LineNameLength;
     double _EndTime;
+    int    _MinInline; long long  _MinInline_Trace;
+    int    _MaxInline; long long  _MaxInline_Trace;
+    int    _MinXline;  long long  _MinXline_Trace;
+    int    _MaxXline;  long long  _MaxXline_Trace;
+    int    _Corner1_X;
+    int    _Corner1_Y;
+    int    _Corner2_X;
+    int    _Corner2_Y;
+    int    _Corner3_X;
+    int    _Corner3_Y;
     QString _LineName;
 
     SEGY();
@@ -45,6 +55,7 @@ public:
     void  SetByte(int,int,int,int,int,int,int,int);
     int   Read2Byte(long long,int);
     int   Read4Byte(long long,int);
+    void  computeILXLRange();
 
 private: 
     FILE* _F;
