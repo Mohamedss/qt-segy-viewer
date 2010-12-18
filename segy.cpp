@@ -14,6 +14,12 @@ SEGY::SEGY()
     _ByteY   = 77;
     _ByteInline = 9;
     _ByteXline  = 21;
+    _MinInline = _MaxInline = _MinXline = _MaxXline = 0;
+    _Corner1_X = _Corner1_Y = _Corner2_X = _Corner2_Y = _Corner3_X = _Corner3_Y = 0;
+    _FirstCDP = _FirstSP = _FirstX = _FirstY = 0;
+    _LastCDP = _LastSP = _LastX = _LastY = 0;
+    _CDPInc = _SPInc = 0;
+    _MinInline_Trace = _MaxInline_Trace = _MinXline_Trace = _MaxXline_Trace = 0;
 }
 
 bool SEGY::OpenFile(char* _Filename)
@@ -327,4 +333,50 @@ int SEGY::Read4Byte(long long trace, int byte)
 {
     if(!ReadTrace(trace)) return 0;
     return i4(_INPTRC, byte);
+}
+
+void SEGY::computeILXLRange()
+{
+    //Read at _ByteInline and from 1 to _TotalTraces
+    int tmp = 0;
+    for(long long trace=1; trace<=_TotalTraces; trace++)
+    {
+        tmp = Read4Byte(trace, _ByteInline);
+        if(_MinInline == 0 && _MaxInline == 0) { _MinInline = tmp; _MinInline_Trace = trace; _MaxInline = tmp; _MaxInline_Trace = trace;}
+        if(tmp < _MinInline)
+        {
+            // First Inline changed
+            _MinInline = tmp;
+            _MinInline_Trace = trace;
+        }
+        else if(tmp > _MaxInline)
+        {
+            // Last Inline changed
+            _MaxInline = tmp;
+            _MaxInline_Trace = trace;
+        }
+        tmp = Read4Byte(trace, _ByteXline);
+        if(_MinXline == 0 && _MaxXline == 0) { _MinXline = tmp; _MinXline_Trace = trace; _MaxXline = tmp; _MaxXline_Trace = trace; }
+        if(tmp < _MinXline)
+        {
+            // First Xline changed
+            _MinXline = tmp;
+            _MinXline_Trace = trace;
+        }
+        else if(tmp > _MaxXline)
+        {
+            // Last Xline changed
+            _MaxXline = tmp;
+            _MaxXline_Trace = trace;
+        }
+    }
+
+    _Corner1_X = Read4Byte(_MinInline_Trace, _ByteX);
+    _Corner1_Y = Read4Byte(_MinXline_Trace, _ByteY);
+
+    _Corner2_X = Read4Byte(_MinInline_Trace, _ByteX);
+    _Corner2_Y = Read4Byte(_MaxXline_Trace, _ByteY);
+
+    _Corner3_X = Read4Byte(_MaxInline_Trace, _ByteX);
+    _Corner3_Y = Read4Byte(_MinXline_Trace, _ByteY);
 }

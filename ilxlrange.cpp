@@ -18,5 +18,7 @@ void ilxlrange::onStart()
 {
     byteInline = ui->spinboxInlineByte->text().toInt();
     byteXline  = ui->spinboxXlineByte->text().toInt();
+    byteX      = ui->spinboxXByte->text().toInt();
+    byteY      = ui->spinboxYByte->text().toInt();
     accept();
 }

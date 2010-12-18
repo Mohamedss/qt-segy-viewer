@@ -31,7 +31,7 @@ private slots:
     void goFirstTrace();
     void goToTrace(int);
     void runSEGYAnalyzer();
-    void runIlXlRange();
+    void runILXLRange();
 };
 
 #endif // MAINWINDOW_H

@@ -16,6 +16,8 @@ public:
     ~ilxlrange();
     int byteInline;
     int byteXline;
+    int byteX;
+    int byteY;
 
 private:
     Ui::ilxlrange *ui;
