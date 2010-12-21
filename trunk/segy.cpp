@@ -370,13 +370,92 @@ void SEGY::computeILXLRange()
             _MaxXline_Trace = trace;
         }
     }
+}
 
-    _Corner1_X = Read4Byte(_MinInline_Trace, _ByteX);
-    _Corner1_Y = Read4Byte(_MinXline_Trace, _ByteY);
+void SEGY::computeCorners()
+{
+    int p1_inline, p1_xline, p1_x, p1_y;
+    int p2_inline, p2_xline, p2_x, p2_y;
+    int p3_inline, p3_xline, p3_x, p3_y;
 
-    _Corner2_X = Read4Byte(_MinInline_Trace, _ByteX);
-    _Corner2_Y = Read4Byte(_MaxXline_Trace, _ByteY);
+    p1_inline = Read4Byte(_MinInline_Trace, _ByteInline);
+    p1_xline = Read4Byte(_MinInline_Trace, _ByteXLine);
+    p1_x = Read4Byte(_MinInline_Trace, _ByteX);
+    p1_y = Read4Byte(_MinInline_Trace, _ByteY);
+    p2_inline = p1_inline;
+    int i = _MinInline_Trace + 1;
+    while(p2_inline == Read4Byte(i, _ByteInline))
+    {
+        p2_xline = Read4Byte(i, _ByteXline);
+        p2_x = Read4Byte(i, _ByteX);
+        p2_y = Read4Byte(i, _ByteY);
+        i++;
+    }
+    p3_inline = Read4Byte(_MaxInline_Trace, _ByteInline);
+    p3_xline = Read4Byte(_MaxInline_Trace, _ByteXline);
+    p3_x = Read4Byte(_MaxInline_Trace, _ByteX);
+    p3_y = Read4Byte(_MaxInline_Trace, _ByteY);
 
-    _Corner3_X = Read4Byte(_MaxInline_Trace, _ByteX);
-    _Corner3_Y = Read4Byte(_MinXline_Trace, _ByteY);
+    //find delta x and delta y for inline and xline
+    int inline_delta   = p1_inline - p2_inline;
+    int inline_delta_x = p1_x - p2_x;
+    int inline_delta_y = p1_y - p2_y;
+    int xline_delta    = p1_inline - p3_inline;
+    int xline_delta_x  = p1_x - p3_x;
+    int xline_delta_y  = p1_y - p3_y;
+
+    int diff;
+    // Corner 1
+    if(p1_inline != _MinInline)
+    {
+        diff = p1_inline - _MinInline;
+        p1_x = p1_x + ((diff * inline_delta_x)/inline_delta);
+        p1_y = p1_y + ((diff * inline_delta_y)/inline_delta);
+    }
+    if(p1_xline != _MinXline)
+    {
+        diff = p1_xline - _MinXline;
+        p1_x = p1_x + ((diff * xline_delta_x)/xline_delta);
+        p1_y = p1_y + ((diff * xline_delta_y)/xline_delta);
+    }
+    _Corner1_X = p1_x;
+    _Corner1_Y = p1_y;
+    // Corner 2
+    if(p2_inline != _MaxInline)
+    {
+        diff = _MaxInline - p2_inline;
+        p2_x = p2_x + ((diff * inline_delta_x)/inline_delta);
+        p2_x = p2_y + ((diff * inline_delta_y)/inline_delta);
+    }
+    if(p2_xline != _MaxXline)
+    {
+        diff = _MaxXline - p2_xline;
+        p2_x = p2_x + ((diff * xline_delta_x)/xline_delta);
+        p2_y = p2_y + ((diff * xline_delta_y)/xline_delta);
+    }
+    _Corner2_X = p2_x;
+    _Corner2_Y = p2_y;
+    // Corner 3
+    if(p3_inline != _MinInline)
+    {
+        diff = p3_inline - _MinInline;
+        p3_x = p3_x + ((diff * inline_delta_x)/inline_delta);
+        p3_y = p3_y + ((diff * inline_delta_y)/inline_delta);
+    }
+    if(p3_xline != _MinXline)
+    {
+        diff = p3_xline - _MinXline;
+        _Corner3_X = p3_x + ((diff * xline_delta_x)/xline_delta);
+        _Corner3_Y = p3_y + ((diff * xline_delta_y)/xline_delta);
+    }
+    _Corner3_X = p3_x;
+    _Corner3_Y = p3_y;
+    // Corner 4
+    int p4_x, p4_y;
+    diff = _MaxXline - P ;
+    _Corner4_X = p3_x + ((diff * xline_delta_x)/xline_delta);
+    _Corner4_Y = p3_y + ((diff * xline_delta_y)/xline_delta);
+    diff = _MaxXline - p3_xline;
+    _Corner4_X = p3_x + ((diff * xline_delta_x)/xline_delta);
+    _Corner4_Y = p3_y + ((diff * xline_delta_y)/xline_delta);
 }
