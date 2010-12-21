@@ -12,8 +12,8 @@ public:
     int    _DataFormat;
     int    _SampleRate;
     int    _TRL;
-    int    _TotalTraces;
-    int    _CurrentTrace;
+    long long    _TotalTraces;
+    long long    _CurrentTrace;
     int    _FirstCDP;
     int    _LastCDP;
     double _CDPInc;
@@ -56,6 +56,7 @@ public:
     int   Read2Byte(long long,int);
     int   Read4Byte(long long,int);
     void  computeILXLRange();
+    void  computeCorners();
 
 private: 
     FILE* _F;
